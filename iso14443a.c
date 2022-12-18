@@ -187,8 +187,8 @@ int iso14443a_dx(void *df_ctx, unsigned int len, uint8_t *data, unsigned int max
         memcpy(buf + 1, data, chunk_size);
 
         ctx->tx_fn_crc(ctx->device, chunk_size + 1, buf);
-        ESP_LOGI("iso14443a", "transmitting %d bytes", chunk_size);
-        ESP_LOG_BUFFER_HEX("iso14443a_tx", buf, chunk_size + 1);
+        // ESP_LOGI("iso14443a", "transmitting %d bytes", chunk_size);
+        // ESP_LOG_BUFFER_HEX("iso14443a_tx", buf, chunk_size + 1);
 
         cursor += chunk_size;
         block_number_odd = !block_number_odd;
@@ -215,8 +215,8 @@ int iso14443a_dx(void *df_ctx, unsigned int len, uint8_t *data, unsigned int max
         memset(buf, 0x00, sizeof(buf));
 
         frame_bytes = ctx->rx_fn(ctx->device, sizeof(buf), buf);
-        ESP_LOGI("iso14443a", "received %d bytes", frame_bytes);
-        ESP_LOG_BUFFER_HEX("iso14443a_rx", buf, frame_bytes);
+        // ESP_LOGI("iso14443a", "received %d bytes", frame_bytes);
+        // ESP_LOG_BUFFER_HEX("iso14443a_rx" buf, frame_bytes);
 
         memcpy(data + cursor, buf + 1, frame_bytes - 1);
         cursor += frame_bytes - 1;
