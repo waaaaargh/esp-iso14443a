@@ -175,7 +175,7 @@ int iso14443a_dx(void *df_ctx, unsigned int len, uint8_t *data, unsigned int max
     while (cursor < len)
     {
         uint8_t chunk_size = len - cursor < max_chunk_length ? len - cursor : max_chunk_length;
-        bool last_chunk = cursor + chunk_size < len;
+        bool last_chunk = cursor + chunk_size >= len;
         memset(buf, 0x00, sizeof(buf));
 
         buf[0] = iso14443_pcb(
