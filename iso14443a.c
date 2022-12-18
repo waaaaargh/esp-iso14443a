@@ -207,15 +207,22 @@ int iso14443a_dx(void *df_ctx, unsigned int len, uint8_t *data, unsigned int max
     // Receive Data
     memset(data, 0x00, max);
 
+    cursor = 0;
+    uint8_t frame_bytes = 0;
     bool rx_last_block = false;
     while (!rx_last_block)
     {
         memset(buf, 0x00, sizeof(buf));
-        uint8_t rx_bytes = ctx->rx_fn(ctx->device, sizeof(buf), buf);
-        ESP_LOGI("iso14443a", "received %d bytes", rx_bytes);
-        ESP_LOG_BUFFER_HEX("iso14443a_rx", buf, rx_bytes);
-        break;
+
+        frame_bytes = ctx->rx_fn(ctx->device, sizeof(buf), buf);
+        ESP_LOGI("iso14443a", "received %d bytes", frame_bytes);
+        ESP_LOG_BUFFER_HEX("iso14443a_rx", buf, frame_bytes);
+
+        memcpy(data + cursor, buf + 1, frame_bytes - 1);
+        cursor += frame_bytes - 1;
+
+        rx_last_block = ~(buf[0] & (1 << 4));
     }
 
-    return 0;
+    return cursor;
 }
